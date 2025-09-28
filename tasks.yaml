@@ -120,3 +120,45 @@
   tags: ["Prompting", "Frontend", "CSS", "UI"]
   difficulty: "Easy"
   visible: true
+
+# Advanced SQL task: fix a broken query to produce monthly order counts per customer
+- id: sql-advanced-monthly-orders
+  title: "SQL: Monthly order counts by customer"
+  description: |
+    You are given two CSVs: `customers_adv.csv` and `orders_adv.csv`.
+    Write a SQL query that returns one row per customer per month with the number of orders in that month.
+
+    Return columns exactly as:
+    - `name` (customer name)
+    - `month` (YYYY-MM)
+    - `order_count`
+
+    Here's a broken query that doesn't pass the tests—fix it:
+
+    ```sql
+    SELECT c.name,
+           strftime('%Y-%m', o.order_date) AS month,
+           COUNT(*) AS order_count
+    FROM customers_adv c
+    LEFT JOIN orders_adv o ON o.customer_id = c.id
+    GROUP BY c.name; -- BUG: missing month in GROUP BY, produces one row per customer
+    ```
+
+    Notes:
+    - Use SQLite functions (the grader runs on SQLite).
+    - Exclude months with zero orders (i.e., only output months present in the data).
+  files: ["data/customers_adv.csv", "data/orders_adv.csv"]
+  grading: "sql"
+  expected_output:
+    - name: "Alice"
+      month: "2024-01"
+      order_count: 1
+    - name: "Alice"
+      month: "2024-02"
+      order_count: 1
+    - name: "Bob"
+      month: "2024-01"
+      order_count: 1
+  tags: ["SQL", "Joins", "Aggregation", "Dates"]
+  difficulty: "Hard"
+  visible: true

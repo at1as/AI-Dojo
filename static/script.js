@@ -1,10 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Render Markdown in Description ---
+    function stripYamlCommentsInText(text) {
+        // remove lines starting with # and inline hints like # Missing..., # BUG: ...
+        return text
+            .replace(/^\s*#.*$/gm, '')
+            .replace(/\s+#\s*(Missing|BUG:?).*$/gm, '')
+            .replace(/\n{3,}/g, '\n\n');
+    }
+    function stripSqlCommentsInText(text) {
+        return text
+            .replace(/\/\*[\s\S]*?\*\//g, '')
+            .replace(/--.*$/gm, '')
+            .replace(/\n{3,}/g, '\n\n');
+    }
+    function cleanMarkdownCodeFences(md) {
+        return md.replace(/```(yaml|yml|sql)\n([\s\S]*?)\n```/g, (m, lang, code) => {
+            let cleaned = code;
+            if (lang === 'yaml' || lang === 'yml') cleaned = stripYamlCommentsInText(code);
+            if (lang === 'sql') cleaned = stripSqlCommentsInText(code);
+            return '```' + lang + '\n' + cleaned.trim() + '\n```';
+        });
+    }
+
     const converter = new showdown.Converter();
     const descriptionElement = document.querySelector('.task-description');
     if (descriptionElement) {
         const markdown = descriptionElement.textContent;
-        const html = converter.makeHtml(markdown);
+        const cleanedMd = cleanMarkdownCodeFences(markdown);
+        const html = converter.makeHtml(cleanedMd);
         descriptionElement.innerHTML = html;
     }
     // Chat elements
@@ -259,6 +282,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Helpers: Strip comments from SQL/YAML before showing to users ---
+    function stripYamlComments(text) {
+        // Remove full-line comments
+        let t = text.replace(/^\s*#.*$/gm, '');
+        // Remove common inline hint comments like "# Missing ..." or "# BUG: ..."
+        t = t.replace(/\s+#\s*(Missing|BUG:?).*$/gm, '');
+        // Collapse blank lines introduced by removals
+        t = t.replace(/\n{3,}/g, '\n\n');
+        return t.trim();
+    }
+
+    function stripSqlComments(text) {
+        // Remove block comments and line comments
+        let t = text.replace(/\/\*[\s\S]*?\*\//g, '');
+        t = t.replace(/--.*$/gm, '');
+        // Collapse excessive blank lines
+        t = t.replace(/\n{3,}/g, '\n\n');
+        return t.trim();
+    }
+
+    function cleanFileContent(filepath, content) {
+        const lower = (filepath || '').toLowerCase();
+        if (lower.endsWith('.sql')) return stripSqlComments(content);
+        if (lower.endsWith('.yaml') || lower.endsWith('.yml')) return stripYamlComments(content);
+        return content;
+    }
+
     async function handleFileAction(filepath, action, buttonElement = null) {
         try {
             const response = await fetch(`/api/file/${filepath}`);
@@ -266,13 +316,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
             const content = data.content;
+            const cleaned = cleanFileContent(filepath, content);
 
             if (action === 'view') {
                 modalFilename.textContent = filepath.split('/').pop();
-                modalFileContent.textContent = content;
+                modalFileContent.textContent = cleaned;
                 modal.style.display = 'flex';
             } else if (action === 'copy') {
-                navigator.clipboard.writeText(content).then(() => {
+                navigator.clipboard.writeText(cleaned).then(() => {
                     if (buttonElement) {
                         const originalText = buttonElement.textContent;
                         buttonElement.textContent = 'Copied!';
@@ -285,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Failed to copy text.');
                 });
             } else if (action === 'copy-chat') {
-                userInput.value += `\n\n\`\`\`\n${content}\n\`\`\``;
+                userInput.value += `\n\n\`\`\`\n${cleaned}\n\`\`\``;
                 autoGrowTextarea();
                 userInput.focus();
                 if (buttonElement) {

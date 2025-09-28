@@ -358,6 +358,21 @@ header h1 {
     box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
 }
 
+/* Header primary CTA should be small like secondary buttons but keep green style */
+.header-meta .complete-btn {
+    width: auto;
+    margin-top: 0;
+    padding: 8px 16px;            /* match secondary */
+    height: 36px;                 /* align with multiselect height */
+    border-radius: 20px;          /* match secondary */
+    font-size: 14px;              /* match secondary */
+    box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
+}
+
+.header-meta .complete-btn:hover {
+    box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+}
+
 .complete-btn:disabled {
     background: #e2e8f0;
     cursor: not-allowed;

@@ -22,16 +22,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const bestPracticesModal = document.getElementById('best-practices-modal');
     const bestPracticesContent = document.getElementById('best-practices-content');
     const closeBestPracticesBtn = bestPracticesModal.querySelector('.close-btn');
+    const HIDE_BP_KEY = 'ai-dojo-hide-best-practices';
     const noResultsMessage = document.getElementById('no-results-message');
     const clearFiltersBtn = document.getElementById('clear-filters-btn');
 
     loadAndApplyFilters();
 
     // --- Render Markdown in Descriptions ---
+    function stripYamlCommentsInText(text) {
+        return text
+            .replace(/^\s*#.*$/gm, '')
+            .replace(/\s+#\s*(Missing|BUG:?).*$/gm, '')
+            .replace(/\n{3,}/g, '\n\n');
+    }
+    function stripSqlCommentsInText(text) {
+        return text
+            .replace(/\/\*[\s\S]*?\*\//g, '')
+            .replace(/--.*$/gm, '')
+            .replace(/\n{3,}/g, '\n\n');
+    }
+    function cleanMarkdownCodeFences(md) {
+        return md.replace(/```(yaml|yml|sql)\n([\s\S]*?)\n```/g, (m, lang, code) => {
+            let cleaned = code;
+            if (lang === 'yaml' || lang === 'yml') cleaned = stripYamlCommentsInText(code);
+            if (lang === 'sql') cleaned = stripSqlCommentsInText(code);
+            return '```' + lang + '\n' + cleaned.trim() + '\n```';
+        });
+    }
+
     const converter = new showdown.Converter();
     document.querySelectorAll('.task-description').forEach(desc => {
         const markdown = desc.textContent;
-        const html = converter.makeHtml(markdown);
+        const cleanedMd = cleanMarkdownCodeFences(markdown);
+        const html = converter.makeHtml(cleanedMd);
         desc.innerHTML = html;
     });
 
@@ -56,6 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update solved counter
     solvedCounter.textContent = `🏆 ${solvedCount} / ${taskItems.length} Tasks Solved`;
+
+    // First-time nudge: auto-open Best Practices if no tasks solved and not dismissed
+    if (solvedCount === 0 && localStorage.getItem(HIDE_BP_KEY) !== 'true') {
+        handleBestPractices();
+    }
 
     // Populate tag filter dropdown
     Array.from(allTags).sort().forEach(tag => {
@@ -117,7 +145,14 @@ document.addEventListener('DOMContentLoaded', () => {
     exportFromModalBtn.addEventListener('click', handleExportReport);
     closeModalBtn.addEventListener('click', () => reportCardModal.style.display = 'none');
     bestPracticesBtn.addEventListener('click', handleBestPractices);
-    closeBestPracticesBtn.addEventListener('click', () => bestPracticesModal.style.display = 'none');
+    function closeBestPracticesModal() {
+        const dontShow = document.getElementById('dont-show-best-practices-again');
+        if (dontShow && dontShow.checked) {
+            localStorage.setItem(HIDE_BP_KEY, 'true');
+        }
+        bestPracticesModal.style.display = 'none';
+    }
+    closeBestPracticesBtn.addEventListener('click', closeBestPracticesModal);
 
 
     // --- Filter Logic ---
@@ -238,11 +273,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 const html = converter.makeHtml(text);
                 bestPracticesContent.innerHTML = html;
                 bestPracticesModal.style.display = 'flex';
+                // Wire footer controls when modal is shown
+                const dontShow = document.getElementById('dont-show-best-practices-again');
+                if (dontShow) {
+                    dontShow.checked = localStorage.getItem(HIDE_BP_KEY) === 'true';
+                }
+                const footerClose = document.getElementById('close-best-practices-footer');
+                if (footerClose) {
+                    footerClose.addEventListener('click', closeBestPracticesModal);
+                }
             })
             .catch(error => {
                 console.error('Error fetching best practices:', error);
                 bestPracticesContent.innerHTML = '<p>Could not load content.</p>';
                 bestPracticesModal.style.display = 'flex';
+                const footerClose = document.getElementById('close-best-practices-footer');
+                if (footerClose) {
+                    footerClose.addEventListener('click', closeBestPracticesModal);
+                }
             });
     }
 

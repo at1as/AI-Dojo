@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Dojo</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -13,9 +14,9 @@
             <p>A place to practice and improve your skills in using AI to solve real-world engineering tasks.</p>
             <div class="header-meta">
                 <span id="solved-counter"></span>
+                <button id="best-practices-btn" class="complete-btn">LLM Best Practices</button>
                 <button id="view-report-btn" class="secondary-btn">View Report Card</button>
                 <button id="clear-cache-btn" class="secondary-btn">Clear Cache</button>
-                <button id="best-practices-btn" class="secondary-btn">LLM Best Practices</button>
             </div>
         </header>
         <div class="filters">
@@ -64,6 +65,13 @@
                     <span class="close-btn">&times;</span>
                 </div>
                 <div id="best-practices-content"></div>
+                <div class="modal-buttons-right">
+                    <label style="display:flex; align-items:center; gap:8px; margin-right:auto;">
+                        <input type="checkbox" id="dont-show-best-practices-again" />
+                        Don't show again
+                    </label>
+                    <button id="close-best-practices-footer" class="secondary-btn">Close</button>
+                </div>
             </div>
         </div>
 
