@@ -1,0 +1,5 @@
+Flask
+PyYAML
+openai
+python-dotenv
+pandas

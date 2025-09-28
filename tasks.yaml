@@ -1,0 +1,122 @@
+- id: openapi-validate
+  title: "OpenAPI: Spec validation"
+  description: |
+    You are provided with an OpenAPI spec written in YAML.
+    Use the LLM to **determine if it is valid**, and if not determine what changes need to be made to make it valid.
+    If any changes are made, determine the **best way to verify the spec is valid on your local system**
+  files: ["specs/broken_openapi.yaml"]
+  grading: "yaml"
+  rubric: "Check if the user verified with openapi-cli and explained their process."
+  tags: ["API", "YAML", "OpenAPI"]
+  difficulty: "Medium"
+  visible: true
+
+- id: sql-autograded
+  title: "Write a SQL query: user spending"
+  description: "Download the provided CSV files (`users.csv`, `orders.csv`). Write a SQL query to find the total spend for each user. The query will be executed against an in-memory SQLite database."
+  files: ["data/users.csv", "data/orders.csv"]
+  grading: "sql"
+  expected_output:
+    - name: "Alice"
+      total_spend: 150
+    - name: "Bob"
+      total_spend: 75
+  tags: ["SQL"]
+  difficulty: "Medium"
+  visible: true
+
+- id: select-the-better-prompt-project-summary
+  title: "Select the Better Prompt: Executive Project Summary"
+  description: "Both prompts are realistic ways someone might ask an LLM to summarize a project. Pick the one that will yield a more actionable, high-quality summary."
+  grading: "select-prompt"
+  prompt_a: "Summarize the attached project report for leadership."
+  prompt_b: "Summarize the attached 12-page project report into a one-page executive summary. Highlight key risks, decisions required in the next 30 days, and any dependencies or blockers that could impact the timeline. Use bullet points for clarity."
+  correct_answer: "b"
+  explanation: "Prompt B is better because it gives a realistic, actionable constraint (one-page summary), specifies what leadership needs (risks, decisions, dependencies), and provides formatting guidance (bullet points). Prompt A is plausible but leaves the LLM too open-ended, likely resulting in either a long summary or one missing key decision points."
+  tags: ["Prompting", "Advanced Summarization"]
+  difficulty: "Easy"
+  visible: true
+
+- id: select-the-better-prompt-technical-document
+  title: "Select the Better Prompt: Technical Documentation"
+  description: "Choose the prompt that is likely to generate higher-quality, usable documentation for engineers."
+  grading: "select-prompt"
+  prompt_a: "Write documentation for this API."
+  prompt_b: "Generate API documentation in Markdown for the provided Python library. Include (1) installation instructions, (2) example code for each function with expected input/output, (3) edge cases to watch for, and (4) a troubleshooting section for common errors."
+  correct_answer: "b"
+  explanation: "Prompt B is more structured and specifies exactly what engineers need from documentation, making it more likely to be usable. Prompt A is too generic and may produce an incomplete or unhelpful reference."
+  tags: ["Prompting", "Technical Writing"]
+  difficulty: "Easy"
+  visible: true
+
+- id: select-the-better-prompt-legal-drafting
+  title: "Select the Better Prompt: Legal Drafting"
+  description: "Choose the more effective prompt for generating a contract clause."
+  grading: "select-prompt"
+  prompt_a: "Draft a contract clause about confidentiality."
+  prompt_b: "Draft a confidentiality clause for a software SaaS agreement that covers both parties, specifies the duration of obligations, defines confidential information, and includes remedies for breaches. Use clear, formal legal language suitable for US law."
+  correct_answer: "b"
+  explanation: "Prompt B is better because it specifies the type of agreement, legal jurisdiction, key clause elements, and tone. Prompt A is plausible but would likely produce a generic clause missing critical legal protections."
+  tags: ["Prompting", "Legal Writing"]
+  difficulty: "Easy"
+  visible: true
+
+- id: select-the-better-prompt-multi-step-analysis
+  title: "Select the Better Prompt: Multi-Step Reasoning"
+  description: "Both prompts are ways someone might ask an LLM to do multi-step analysis. Pick the one that will produce a more thorough, verifiable response."
+  grading: "select-prompt"
+  prompt_a: "Analyze this sales dataset for trends."
+  prompt_b: "Analyze this sales dataset of 24 months of regional data. For each region, identify trends in revenue and units sold, detect anomalies, and provide a hypothesis for causes. Include charts where relevant and summarize key actionable insights for management."
+  correct_answer: "b"
+  explanation: "Prompt B is better because it specifies time frame, granularity, types of analysis (trends, anomalies), and output requirements (charts, actionable insights). Prompt A is realistic but too vague for complex, multi-step analysis."
+  tags: ["Prompting", "Data Analysis"]
+  difficulty: "Easy"
+  visible: true
+
+- id: select-the-better-prompt-code-review
+  title: "Select the Better Prompt: Code Review"
+  description: "Both prompts are realistic ways an engineer might ask an LLM to review code. Choose the one that is more likely to produce a detailed and actionable code review."
+  grading: "select-prompt"
+  prompt_a: "Review this Python code."
+  prompt_b: "Review this Python function for performance, readability, and edge-case errors. Suggest improvements, explain why each suggestion is needed, and provide an example of a refactored version if applicable."
+  correct_answer: "b"
+  explanation: "Prompt B provides clear criteria for review (performance, readability, edge cases), requests explanations for suggestions, and asks for refactored examples. Prompt A is plausible but leaves too much unspecified, likely producing shallow or incomplete feedback."
+  tags: ["Prompting", "Code Review"]
+  difficulty: "Easy"
+  visible: true
+
+- id: select-the-better-prompt-spring-endpoint
+  title: "Select the Better Prompt: Spring Endpoint Fail-Fast Feature"
+  description: "You have a Java Spring codebase with a `/users` endpoint that should be disabled in certain environments. Choose the prompt that is likely to generate a detailed, actionable plan and implementation guidance."
+  grading: "select-prompt"
+  prompt_a: "Add a flag to the `/users` endpoint to disable it in certain environments and reject requests."
+  prompt_b: "Analyze the `/users` endpoint in my Java Spring codebase. Propose a configurable fail-fast mechanism that rejects requests when the endpoint is disabled in certain environments. Suggest the correct HTTP status code (e.g., 501, 500, 401, 400, 403, 404) and explain your reasoning. Describe the code changes needed, whether this is the recommended Spring approach or if a higher-level Spring feature exists, and provide a step-by-step plan before any code is written."
+  correct_answer: "b"
+  explanation: "Prompt B is better because it guides the LLM to: (1) analyze the code, (2) reason about the correct HTTP status code with justification, (3) propose a configurable solution, (4) evaluate Spring best practices, and (5) provide a stepwise implementation plan. Prompt A is realistic but too vague, likely resulting in a simple flag suggestion without reasoning, best practices, or detailed steps."
+  tags: ["Prompting", "Java", "Spring", "Advanced"]
+  difficulty: "Easy"
+  visible: true
+
+- id: select-the-better-prompt-bootstrap-repo
+  title: "Select the Better Prompt: Bootstrapping a New Repository"
+  description: "You want to bootstrap a new code repository with an LLM's help. Choose the prompt that will result in a repo setup that actually fits your needs and context."
+  grading: "select-prompt"
+  prompt_a: "Bootstrap a new repo for me with a Flask backend."
+  prompt_b: "Bootstrap a new repo for me with a Flask backend. I'm an experienced Python developer, but this repo will be used by multiple teammates with varying skill levels. Priorities: (1) simple and easy to contribute to, (2) fast to get running locally with minimal setup, and (3) appropriate for an internal tool, so security should be solid but not over-engineered. Please suggest a project structure, key dependencies, initial endpoints, and whether we should optimize for rapid prototyping (to explore ideas) or build more strictly toward the exact requirements provided."
+  correct_answer: "b"
+  explanation: "Prompt B is better because it provides critical context about the developer's background, team composition, priorities (simplicity, speed, contribution model), and environment (internal tool vs. external). It also invites the LLM to consider tradeoffs (prototype vs. production-ready) and propose a structured plan. Prompt A is plausible, but without context it will likely generate a default repo scaffold that may not match the team's actual needs."
+  tags: ["Prompting", "Software Engineering", "Repo Setup"]
+  difficulty: "Easy"
+  visible: true
+
+- id: select-the-better-prompt-frontend-alignment
+  title: "Select the Better Prompt: Frontend Layout Fix"
+  description: "You have three text boxes that are currently stacked vertically, but you want them to be aligned horizontally. Choose the prompt that is more likely to produce a correct, maintainable solution."
+  grading: "select-prompt"
+  prompt_a: "Change the three text boxes on the page so they are aligned horizontally instead of vertically."
+  prompt_b: "We currently have three text boxes that are vertically aligned, but I want them to be horizontally aligned instead. Please evaluate the page's structure and suggest the best approach. I've heard flexbox is common, but let me know if grid or another method would be better based on the current markup. Explain why you're choosing that approach, then provide the exact code changes needed to make the fix in a clean, maintainable way."
+  correct_answer: "b"
+  explanation: "Prompt B is better because it doesn't just request a change — it asks the LLM to evaluate options (flexbox, grid, or other), justify the choice, and provide specific, maintainable code changes. It also shares that the requester has limited frontend experience, which helps the LLM tailor its explanation. Prompt A is plausible but risks getting a one-size-fits-all code snippet without considering the page's existing structure or best practices."
+  tags: ["Prompting", "Frontend", "CSS", "UI"]
+  difficulty: "Easy"
+  visible: true

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ task.title }} - AI Literacy Dojo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="back-link">&larr; Back to Tasks</a>
+            <h1>{{ task.title }}</h1>
+            <p class="task-description">{{ task.description }}</p>
+        </header>
+
+        <main>
+            <div class="prompt-selection-container">
+                <div class="prompt-tile" id="prompt-a">
+                    <h3>Prompt A</h3>
+                    <p>{{ task.prompt_a }}</p>
+                </div>
+                <div class="prompt-tile" id="prompt-b">
+                    <h3>Prompt B</h3>
+                    <p>{{ task.prompt_b }}</p>
+                </div>
+            </div>
+
+            <div class="task-actions">
+                <button id="complete-btn" class="complete-btn" disabled>Submit Answer</button>
+            </div>
+        </main>
+
+        <div id="grading-in-progress" class="grading-result" style="display: none;">
+            <h2>Grading in Progress...</h2>
+            <p>Please wait while your submission is being evaluated.</p>
+        </div>
+        <div id="grading-result" class="grading-result" style="display: none;"></div>
+    </div>
+
+    <script>
+        const taskId = "{{ task_id }}";
+        const taskGradingType = "{{ task.grading }}";
+        const correctAnswer = "{{ task.correct_answer }}";
+        const explanation = "{{ task.explanation }}";
+    </script>
+    <!-- Load Showdown (used by select_prompt.js to render markdown) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+    <script src="{{ url_for('static', filename='select_prompt.js') }}"></script>
+</body>
+</html>

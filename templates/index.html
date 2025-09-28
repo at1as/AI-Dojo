@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Literacy Dojo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🥋 AI Literacy Dojo</h1>
+            <p>A place to practice and improve your skills in using AI to solve real-world engineering tasks.</p>
+            <div class="header-meta">
+                <span id="solved-counter"></span>
+                <button id="view-report-btn" class="secondary-btn">View Report Card</button>
+                <button id="clear-cache-btn" class="secondary-btn">Clear Cache</button>
+                <button id="best-practices-btn" class="secondary-btn">LLM Best Practices</button>
+            </div>
+        </header>
+        <div class="filters">
+            <div class="multiselect" id="status-filter">
+                <button class="multiselect-btn">Status</button>
+                <div class="multiselect-options" style="display: none;">
+                    <label><input type="checkbox" value="solved" /> Solved</label>
+                    <label><input type="checkbox" value="unsolved" /> Unsolved</label>
+                </div>
+            </div>
+            <div class="multiselect" id="difficulty-filter">
+                <button class="multiselect-btn">Difficulty</button>
+                <div class="multiselect-options" style="display: none;">
+                    <label><input type="checkbox" value="easy" /> Easy</label>
+                    <label><input type="checkbox" value="medium" /> Medium</label>
+                    <label><input type="checkbox" value="hard" /> Hard</label>
+                </div>
+            </div>
+            <div class="multiselect" id="tag-filter">
+                <button class="multiselect-btn">Tags</button>
+                <div class="multiselect-options" style="display: none;">
+                    <!-- Tags will be populated by JavaScript -->
+                </div>
+            </div>
+            <button id="clear-filters-btn" class="secondary-btn" disabled>Clear All</button>
+        </div>
+        <!-- Report Card Modal -->
+        <div id="report-card-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Your Report Card</h2>
+                    <span class="close-btn">&times;</span>
+                </div>
+                <pre id="report-card-content"></pre>
+                <div class="modal-buttons-right">
+                    <button id="export-from-modal-btn" class="complete-btn">Export as Markdown</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- LLM Best Practices Modal -->
+        <div id="best-practices-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>LLM Best Practices</h2>
+                    <span class="close-btn">&times;</span>
+                </div>
+                <div id="best-practices-content"></div>
+            </div>
+        </div>
+
+        <div class="task-list">
+            <div id="no-results-message" style="display: none;">No tasks match your current filters.</div>
+            {% for task_id, task in tasks.items() %}
+                <a href="{{ url_for('task', task_id=task_id) }}" class="task-item" data-difficulty="{{ task.difficulty }}" data-tags="{{ task.tags | join(',') }}">
+                    <h2>{{ task.title }} <span class="score-display" data-task-id="{{ task_id }}"></span></h2>
+                    <p class="task-description">{{ task.description }}</p>
+                    {% if task.tags %}
+                        <div class="tags">
+                            {% if task.difficulty %}
+                                <span class="tag difficulty-{{ task.difficulty | lower }}">{{ task.difficulty }}</span>
+                            {% endif %}
+                            {% for tag in task.tags %}
+                                <span class="tag">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>

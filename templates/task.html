@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ task.title }} - AI Literacy Dojo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="back-link">&larr; Back to Tasks</a>
+            <h1>{{ task.title }}</h1>
+            <p class="task-description">{{ task.description }}</p>
+            {% if task.files %}
+                <div class="task-files">
+                    <strong>Task Files:</strong>
+                    {% for file in task.files %}
+                        <div class="file-item">
+                            <span>{{ file.split('/')[-1] }}</span>
+                            <div class="file-actions">
+                                <a href="{{ url_for('static', filename=file) }}" download>Download</a>
+                                <button class="view-btn" data-filepath="{{ file }}">View</button>
+                                                                <button class="copy-btn" data-filepath="{{ file }}">Copy</button>
+                                <button class="copy-chat-btn" data-filepath="{{ file }}">Copy to Chat</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </header>
+
+        <main>
+            <div class="chat-container">
+                <div id="chat-box" class="chat-box"></div>
+            </div>
+
+            <form id="chat-form" class="chat-form">
+                <textarea id="user-input" placeholder="Type your message... (Shift+Enter for new line)" rows="1"></textarea>
+                <button type="submit">Send</button>
+            </form>
+            <div class="task-actions">
+                <button id="export-chat-btn" class="secondary-btn">Export Chat</button>
+                <button id="complete-btn" class="complete-btn" disabled>Complete Task</button>
+            </div>
+        </main>
+
+        <!-- Move grading containers outside of <main> so they are visible when main is hidden -->
+        <div id="grading-in-progress" class="grading-result" style="display: none;">
+            <h2>Grading in Progress...</h2>
+            <p>Please wait while your submission is being evaluated.</p>
+        </div>
+        <div id="grading-result" class="grading-result" style="display: none;"></div>
+    </div>
+
+    <script>
+        const taskId = "{{ task_id }}";
+        const taskGradingType = "{{ task.grading }}";
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <!-- Modal for YAML Submission -->
+    <div id="yaml-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Submit Your Final YAML Spec</h3>
+            <p>Please paste your final YAML spec below to be graded.</p>
+            <textarea id="yaml-submission-input" rows="10"></textarea>
+            <div class="modal-buttons-right">
+                <button id="cancel-yaml-submission" class="secondary-btn">Cancel</button>
+                <button id="submit-yaml-spec" class="complete-btn">Submit for Grading</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for SQL Submission -->
+    <div id="sql-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Submit Your Final SQL Query</h3>
+            <p>Please paste your final SQL query below to be graded.</p>
+            <textarea id="sql-submission-input" rows="10"></textarea>
+            <div class="modal-buttons-right">
+                <button id="cancel-sql-submission" class="secondary-btn">Cancel</button>
+                <button id="submit-sql-query" class="complete-btn">Submit for Grading</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for viewing file content -->
+    <div id="file-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-header">
+                <h3 id="modal-filename"></h3>
+                                <div class="modal-buttons">
+                    <button id="modal-copy-chat-btn">Copy to Chat</button>
+                    <button id="modal-copy-btn">Copy to Clipboard</button>
+                </div>
+            </div>
+            <pre id="modal-file-content"></pre>
+        </div>
+    </div>
+</body>
+</html>
