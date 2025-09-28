@@ -1,0 +1,12 @@
+# Environment variables
+.env
+
+# Python artifacts
+__pycache__/
+*.pyc
+
+# OS-specific files
+.DS_Store
+
+# Virtual environment
+venv/
