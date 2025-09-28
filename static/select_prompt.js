@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
             delete grades[taskId];
             localStorage.setItem('ai-dojo-grades', JSON.stringify(grades));
         }
+
+        // (removed) defer read-only prompt text injection until after we render the grading section
     } catch (_) {
         localStorage.removeItem('ai-dojo-grades');
     }
@@ -81,9 +83,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Build optional submission rendering
         let submissionSection = '';
         if (data.submission && data.submission.type === 'select-prompt') {
+            const chosen = String(data.submission.value || '').toLowerCase();
+            const aSelected = chosen === 'a' ? 'selected' : '';
+            const bSelected = chosen === 'b' ? 'selected' : '';
             submissionSection = `
                 <h3>Your Selection</h3>
-                <p>Prompt ${String(data.submission.value).toUpperCase()}</p>
+                <div class="prompt-selection-container readonly">
+                    <div class="prompt-tile ${aSelected}">
+                        <h3>Prompt A</h3>
+                        <p id="ro-prompt-a-text"></p>
+                    </div>
+                    <div class="prompt-tile ${bSelected}">
+                        <h3>Prompt B</h3>
+                        <p id="ro-prompt-b-text"></p>
+                    </div>
+                </div>
             `;
         }
 
@@ -99,6 +113,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         gradingResult.style.display = 'block';
         if (document.querySelector('main')) document.querySelector('main').style.display = 'none';
+
+        // If we rendered read-only prompt tiles, fill them with the actual prompt text
+        if (data.submission && data.submission.type === 'select-prompt') {
+            try {
+                const meta = document.getElementById('prompt-texts');
+                const aText = meta ? meta.getAttribute('data-a') : '';
+                const bText = meta ? meta.getAttribute('data-b') : '';
+                const aEl = document.getElementById('ro-prompt-a-text');
+                const bEl = document.getElementById('ro-prompt-b-text');
+                if (aEl) aEl.textContent = aText || '';
+                if (bEl) bEl.textContent = bText || '';
+            } catch (_) {
+                // no-op
+            }
+        }
 
         const retryBtn = document.getElementById('retry-btn');
         if (retryBtn) {

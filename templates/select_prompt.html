@@ -44,6 +44,8 @@
         const correctAnswer = "{{ task.correct_answer }}";
         const explanation = "{{ task.explanation }}";
     </script>
+    <!-- Expose prompt texts via data attributes (avoids JS linting issues with templating) -->
+    <meta id="prompt-texts" data-a="{{ task.prompt_a | e }}" data-b="{{ task.prompt_b | e }}">
     <!-- Load Showdown (used by select_prompt.js to render markdown) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
     <script src="{{ url_for('static', filename='select_prompt.js') }}"></script>
