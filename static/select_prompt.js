@@ -111,6 +111,11 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
+        // Toggle fail styling for very low scores
+        if (gradingResult && typeof data.score === 'number') {
+            gradingResult.classList.toggle('fail', data.score <= 1);
+        }
+
         gradingResult.style.display = 'block';
         if (document.querySelector('main')) document.querySelector('main').style.display = 'none';
 

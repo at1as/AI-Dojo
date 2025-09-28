@@ -42,3 +42,10 @@ Before sending a prompt, ask yourself:
 3. Do I want the model to **ask clarifying questions** before proceeding?
 4. Should I provide **examples** of the expected output?
 5. Did I plan for **iteration and feedback** if the first draft isn’t perfect?
+
+---
+
+## External Resources
+
+- [Vibe Coding with LLMs: Tips for Building Faster](https://www.jasonwillems.com/ai/llm/2025/08/01/Vibe-Coding/)
+- [Mitigating Vibe Coding Security Pitfalls](https://www.jasonwillems.com/ai/llm/2025/09/28/Mitigating-Vibe-Coding-Pitfalls/)

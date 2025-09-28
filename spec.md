@@ -1,5 +1,5 @@
 
-# 🥋 AI Literacy Dojo — Spec
+# 🥋 AI Dojo — Spec
 
 ## 1. Context
 
@@ -157,5 +157,3 @@ expected_output: "parsed/example.json"
 ⚡️ This is essentially **“LeetCode for AI Literacy”**, starting simple and extensible over time.
 
 ---
-
-Would you like me to also draft a **rubric template for LLM grading prompts** (so Cursor can bootstrap the grader logic right away)? That would make v1 almost instantly testable.

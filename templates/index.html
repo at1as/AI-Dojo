@@ -10,6 +10,14 @@
 <body>
     <div class="container">
         <header>
+            <div class="brand-links">
+                <a class="icon-btn" href="https://github.com/at1as/ai-dojo" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub" title="View on GitHub">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                </a>
+                <button id="about-btn" class="about-btn" type="button">About</button>
+            </div>
             <h1>🥋 AI Dojo</h1>
             <p>A place to practice and improve your skills in using AI to solve real-world engineering tasks.</p>
             <div class="header-meta">
@@ -95,7 +103,35 @@
             {% endfor %}
         </div>
     </div>
+    <!-- About Modal -->
+    <div id="about-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>About AI Dojo</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div>
+                <p><b>🥋 AI Dojo</b> is a MIT licensed, open-source project created by <a href="https://www.jasonwillems.com" target="_blank" rel="noopener noreferrer">Jason Willems</a>, a NYC-based software engineer and operator who is passionate about AI.</p>
+                <p>AI Dojo was created to help engineers practice and improve their skills in using AI to solve real-world engineering tasks, building a solid foundation for them to incorporate AI into their everyday tasks.</p>
+                <p>Feel free to fork it or submit a PR.</p>
+                <p>You can add new tasks in the YAML spec at <code>tasks.yaml</code>.</p>
+                <p><a href="https://github.com/at1as/ai-dojo" target="_blank" rel="noopener noreferrer">View on GitHub</a></p>
+            </div>
+        </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>
+    <script>
+        (function(){
+            const aboutBtn = document.getElementById('about-btn');
+            const aboutModal = document.getElementById('about-modal');
+            if (aboutBtn && aboutModal) {
+                const closeBtn = aboutModal.querySelector('.close-btn');
+                aboutBtn.addEventListener('click', () => aboutModal.style.display = 'flex');
+                if (closeBtn) closeBtn.addEventListener('click', () => aboutModal.style.display = 'none');
+                window.addEventListener('click', (e) => { if (e.target === aboutModal) aboutModal.style.display = 'none'; });
+            }
+        })();
+    </script>
 </body>
 </html>

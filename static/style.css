@@ -64,6 +64,49 @@ header h1 {
     line-height: 1.2;
 }
 
+/* Branding links (GitHub icon, About) */
+.brand-links {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    color: #111827;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.icon-btn:hover {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+}
+
+.about-btn {
+    padding: 8px 12px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #718096, #4a5568);
+    color: white;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.about-btn:hover {
+    filter: brightness(1.05);
+}
+
 .task-description {
     font-size: 18px;
     color: #4a5568;
@@ -592,6 +635,8 @@ header h1 {
     gap: 20px;
     padding-bottom: 16px;
     border-bottom: 2px solid #f0f2f5;
+    /* Leave space on the right for the absolutely-positioned close button */
+    padding-right: 64px;
 }
 
 .modal-header h3 {
@@ -600,6 +645,13 @@ header h1 {
     font-size: 24px;
     font-weight: 700;
     color: #2d3748;
+}
+
+/* Ensure header action buttons layout nicely and don't collide with the X */
+.modal-header .modal-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 #modal-copy-btn, #modal-copy-chat-btn, .copy-chat-btn, #cancel-sql-submission {
@@ -696,6 +748,13 @@ header h1 {
     overflow-wrap: anywhere;  /* allow breaks anywhere to avoid overflow */
     word-break: break-word;
     overflow-y: scroll;
+}
+
+/* Fail state (used when score is 0/5 or 1/5) */
+.grading-result.fail {
+    background: linear-gradient(135deg, #fff5f5, #ffe8e8);
+    border-color: #f56565; /* red-400 */
+    box-shadow: 0 4px 12px rgba(245, 101, 101, 0.15);
 }
 
 .grading-result h2 {
