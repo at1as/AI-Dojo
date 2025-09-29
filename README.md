@@ -8,6 +8,7 @@ Practice AI literacy skills through hands-on tasks and instant feedback. This ap
   - SQL query tasks (auto-graded with SQLite and pandas)
   - OpenAPI/YAML spec validation tasks (auto-graded parsing)
   - LLM Chat-driven tasks with rubric-based qualitative feedback
+- Supports **AI Findability**: exercises are designed to surface what works (and what doesn’t) when interacting with AI
 - Grade persistence in browser localStorage so returning to a task shows your previous result and a Retry option
 - "Your Submission" persistence in browser localStorage (SQL/YAML/prompt selection/chat) to put grades in context
 - Modern UI with chat, file preview, export chat, and modals
@@ -133,6 +134,11 @@ If grades appear stuck or malformed, you can clear them via DevTools:
 
 
 ## FAQ
+
+#### Q: What was the motivation behind this project? 🤔
+
+More on that [here](https://www.jasonwillems.com/ai/llm/2025/09/28/Introducing-AI-Dojo/).
+
 
 #### Q: Was this codebase vibe coded? 🤔
 
